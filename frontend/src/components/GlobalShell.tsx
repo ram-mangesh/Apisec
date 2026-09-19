@@ -516,15 +516,39 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                     {notifications.map((notif) => (
                       <div
                         key={notif.id}
-                        className={`p-3.5 hover:bg-slate-50 cursor-pointer transition-colors ${
-                          !notif.read ? 'bg-slate-50/70' : ''
+                        onClick={() => {
+                          setNotifications(
+                            notifications.map((n) =>
+                              n.id === notif.id ? { ...n, read: true } : n
+                            )
+                          );
+                          setNotificationsOpen(false);
+                          if (notif.link_screen) {
+                            onNavigate(notif.link_screen as ScreenType, notif.link_id);
+                          }
+                        }}
+                        className={`p-3.5 hover:bg-slate-100 cursor-pointer transition-all group ${
+                          !notif.read ? 'bg-purple-50/40' : ''
                         }`}
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <div className="font-semibold text-slate-900 text-[12px]">{notif.title}</div>
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            {!notif.read && (
+                              <span className="h-1.5 w-1.5 rounded-full bg-purple-600 shrink-0" />
+                            )}
+                            <div className="font-bold text-slate-900 text-[12px] group-hover:text-purple-700 transition-colors truncate">
+                              {notif.title}
+                            </div>
+                          </div>
                           <span className="text-[10px] text-slate-400 font-mono shrink-0">{notif.time}</span>
                         </div>
                         <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">{notif.description}</p>
+                        <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100/60 text-[10px] font-mono">
+                          <span className="capitalize text-slate-400 font-semibold">{notif.type} alert</span>
+                          <span className="text-purple-700 font-bold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                            Open {notif.link_screen || 'details'} →
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
