@@ -249,35 +249,8 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
           </div>
         </div>
 
-        {/* Sidebar Bottom: Multi-Scanner Mesh Status & User Profile */}
+        {/* Sidebar Bottom: User Profile */}
         <div className="p-3 border-t border-slate-200 space-y-2.5">
-          {/* Scanner Mesh Status Mini Widget */}
-          {!sidebarCollapsed && (
-            <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-[11px] space-y-1.5">
-              <div className="flex items-center justify-between font-mono font-bold text-[10px] text-slate-500 uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                  Mesh Engine
-                </span>
-                <span className="text-emerald-600 font-mono">4/4 ACTIVE</span>
-              </div>
-              <div className="grid grid-cols-2 gap-1 text-[10px] font-mono text-slate-600">
-                <div className="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                  <span className="text-emerald-600 font-bold">✓</span> Nmap
-                </div>
-                <div className="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                  <span className="text-blue-600 font-bold">✓</span> Nuclei
-                </div>
-                <div className="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                  <span className="text-amber-600 font-bold">✓</span> ZAP
-                </div>
-                <div className="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                  <span className="text-purple-600 font-bold">✓</span> Acunetix
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* User Profile Card */}
           <div className="relative" ref={userRef}>
             <div

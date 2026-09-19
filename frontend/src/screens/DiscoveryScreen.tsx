@@ -40,7 +40,7 @@ interface DiscoveryScreenProps {
 
 interface LogEntry {
   timestamp: string;
-  tool: 'NMAP' | 'NUCLEI' | 'ZAP' | 'ACUNETIX' | 'APISEC' | 'SYSTEM';
+  tool: 'PORT-SCAN' | 'CVE-ENUM' | 'DAST-ENGINE' | 'LOGIC-DAST' | 'APISEC' | 'SYSTEM';
   message: string;
 }
 
@@ -72,10 +72,10 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
   };
 
   const stages = [
-    'Phase 1: Nmap Port Reconnaissance & Shadow Listener Discovery...',
-    'Phase 2: Nuclei Fast YAML Template Misconfiguration & Exposure Probes...',
-    'Phase 3: OWASP ZAP Active & Passive DAST Spidering on Endpoints...',
-    'Phase 4: Acunetix Deep DAST Engine & Business Logic Threat Modeling...',
+    'Phase 1: Custom Port Scanning Engine Reconnaissance & Shadow Listener Discovery...',
+    'Phase 2: Common Vulnerability Enumeration Engine Probes & Exposure Scans...',
+    'Phase 3: Dynamic Application Security Testing Engine Active Spidering...',
+    'Phase 4: Deep Logic & Business Flaw Engine Threat Modeling...',
     'Phase 5: APISEC Causal DAG Correlation & Choke-Point Synthesis...',
   ];
 
@@ -87,7 +87,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
 
     setScanLogs([
       { timestamp: now(), tool: 'SYSTEM', message: `Initializing APISEC Unified Multi-Mesh Orchestrator on ${targetUrl}...` },
-      { timestamp: now(), tool: 'SYSTEM', message: `Active Scanner Pipeline: ${selectedTools.map(t => t.toUpperCase()).join(' + ')}` },
+      { timestamp: now(), tool: 'SYSTEM', message: `Active Scanner Pipeline: PORT SCANNER + CVE ENUM + DAST ENGINE + DEEP LOGIC` },
     ]);
 
     try {
@@ -109,38 +109,38 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
           setCurrentStageIdx(0);
           setScanLogs((l) => [
             ...l,
-            { timestamp: now(), tool: 'NMAP', message: `Scanning ports for host ${targetUrl}...` },
-            { timestamp: now(), tool: 'NMAP', message: `Discovered Open Ports: 80/http, 443/https, 8001/api-mesh, 8088/shadow-debug` },
-            { timestamp: now(), tool: 'NMAP', message: `FLAGGED SHADOW SERVICE: Undocumented debug route on port 8088 (Node: AWS us-east-1-node-77)` },
+            { timestamp: now(), tool: 'PORT-SCAN', message: `Scanning network ports for target host ${targetUrl}...` },
+            { timestamp: now(), tool: 'PORT-SCAN', message: `Discovered Open Ports: 80/http, 443/https, 8001/api-mesh, 8088/shadow-debug` },
+            { timestamp: now(), tool: 'PORT-SCAN', message: `FLAGGED SHADOW SERVICE: Undocumented debug route on port 8088 (Node: AWS us-east-1-node-77)` },
           ]);
         } else if (next >= 40 && next < 65) {
           setCurrentStageIdx(1);
           setScanLogs((l) => [
             ...l,
-            { timestamp: now(), tool: 'NUCLEI', message: `Executing 150+ API misconfiguration & exposure templates...` },
-            { timestamp: now(), tool: 'NUCLEI', message: `[exposed-debug-endpoint] GET /api/v1/users/export-debug [CVSS: 7.8] - Leaked 50 active UUIDs` },
-            { timestamp: now(), tool: 'NUCLEI', message: `[unprotected-mfa-route] POST /api/v1/auth/mfa/verify-otp [CVSS: 8.2] - Missing rate limit header` },
+            { timestamp: now(), tool: 'CVE-ENUM', message: `Executing 150+ API misconfiguration & exposure templates...` },
+            { timestamp: now(), tool: 'CVE-ENUM', message: `[exposed-debug-endpoint] GET /api/v1/users/export-debug [CVSS: 7.8] - Leaked 50 active UUIDs` },
+            { timestamp: now(), tool: 'CVE-ENUM', message: `[unprotected-mfa-route] POST /api/v1/auth/mfa/verify-otp [CVSS: 8.2] - Missing rate limit header` },
           ]);
         } else if (next >= 65 && next < 85) {
           setCurrentStageIdx(2);
           setScanLogs((l) => [
             ...l,
-            { timestamp: now(), tool: 'ZAP', message: `Running OWASP ZAP active & passive DAST spider across OpenAPI routes...` },
-            { timestamp: now(), tool: 'ZAP', message: `[BOLA-CWE-639] Dual-Token check flagged object ID tampering on GET /api/v1/users/{id} [CVSS: 9.1]` },
-            { timestamp: now(), tool: 'ZAP', message: `[Mass-Assignment-CWE-915] Body schema injection successful on PUT /api/v1/users/{id}/profile [CVSS: 9.3]` },
+            { timestamp: now(), tool: 'DAST-ENGINE', message: `Running dynamic DAST spider and differential fuzzing across OpenAPI routes...` },
+            { timestamp: now(), tool: 'DAST-ENGINE', message: `[BOLA-CWE-639] Dual-Token check flagged object ID tampering on GET /api/v1/users/{id} [CVSS: 9.1]` },
+            { timestamp: now(), tool: 'DAST-ENGINE', message: `[Mass-Assignment-CWE-915] Body schema injection successful on PUT /api/v1/users/{id}/profile [CVSS: 9.3]` },
           ]);
         } else if (next >= 85 && next < 95) {
           setCurrentStageIdx(3);
           setScanLogs((l) => [
             ...l,
-            { timestamp: now(), tool: 'ACUNETIX', message: `Acunetix Deep DAST Engine executing business logic & BFLA payout simulation...` },
-            { timestamp: now(), tool: 'ACUNETIX', message: `[BFLA-CWE-285] Standard identity successfully triggered POST /api/v1/payments/payouts/instant [CVSS: 9.6]` },
+            { timestamp: now(), tool: 'LOGIC-DAST', message: `Deep DAST Engine executing business logic & BFLA payout simulation...` },
+            { timestamp: now(), tool: 'LOGIC-DAST', message: `[BFLA-CWE-285] Standard identity successfully triggered POST /api/v1/payments/payouts/instant [CVSS: 9.6]` },
           ]);
         } else if (next >= 95) {
           setCurrentStageIdx(4);
           setScanLogs((l) => [
             ...l,
-            { timestamp: now(), tool: 'APISEC', message: `Cross-Tool Correlation: Connecting Nmap Shadow Port 8088 -> Nuclei Debug Leak -> ZAP BOLA -> Acunetix BFLA Payout...` },
+            { timestamp: now(), tool: 'APISEC', message: `Cross-Engine Correlation: Connecting Shadow Port 8088 -> Debug Leak -> BOLA -> BFLA Instant Payout...` },
             { timestamp: now(), tool: 'APISEC', message: `✓ Synthesized 3 Validated Multi-Hop Attack Paths (Max Compound CVSS: 9.8 Critical)` },
             { timestamp: now(), tool: 'APISEC', message: `✓ Min-Cut Analysis: 2 Choke-Point remediations neutralize 100% of attack paths.` },
           ]);
@@ -160,10 +160,10 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
 
   const getToolLogColor = (tool: LogEntry['tool']) => {
     switch (tool) {
-      case 'NMAP': return 'text-sky-700 bg-sky-50 border-sky-200';
-      case 'NUCLEI': return 'text-purple-700 bg-purple-50 border-purple-200';
-      case 'ZAP': return 'text-amber-700 bg-amber-50 border-amber-200';
-      case 'ACUNETIX': return 'text-blue-700 bg-blue-50 border-blue-200';
+      case 'PORT-SCAN': return 'text-sky-700 bg-sky-50 border-sky-200';
+      case 'CVE-ENUM': return 'text-purple-700 bg-purple-50 border-purple-200';
+      case 'DAST-ENGINE': return 'text-amber-700 bg-amber-50 border-amber-200';
+      case 'LOGIC-DAST': return 'text-blue-700 bg-blue-50 border-blue-200';
       case 'APISEC': return 'text-emerald-700 bg-emerald-50 border-emerald-200 font-bold';
       default: return 'text-slate-700 bg-slate-100 border-slate-200';
     }
@@ -243,7 +243,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
             style={activeTab === 'nmap' ? { borderColor: currentConfig.primary, color: currentConfig.primary } : {}}
           >
             <Server className="h-4 w-4 text-sky-600" />
-            <span>Nmap (Port Recon)</span>
+            <span>Port Scanning Engine</span>
           </button>
 
           <button
@@ -256,7 +256,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
             style={activeTab === 'nuclei' ? { borderColor: currentConfig.primary, color: currentConfig.primary } : {}}
           >
             <Flame className="h-4 w-4 text-purple-600" />
-            <span>Nuclei (Fast Probes)</span>
+            <span>CVE Enumeration Engine</span>
           </button>
 
           <button
@@ -269,7 +269,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
             style={activeTab === 'zap' ? { borderColor: currentConfig.primary, color: currentConfig.primary } : {}}
           >
             <Zap className="h-4 w-4 text-amber-600" />
-            <span>OWASP ZAP (DAST)</span>
+            <span>Dynamic Application Security Testing Engine</span>
           </button>
 
           <button
@@ -282,7 +282,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
             style={activeTab === 'acunetix' ? { borderColor: currentConfig.primary, color: currentConfig.primary } : {}}
           >
             <Shield className="h-4 w-4 text-blue-600" />
-            <span>Acunetix (Enterprise)</span>
+            <span>Deep DAST & Logic Engine</span>
           </button>
 
           <button
@@ -327,8 +327,8 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                 >
                   <option value="Comprehensive Multi-Mesh Attack Surface Audit">Comprehensive Multi-Mesh Attack Surface Audit (All Engines)</option>
                   <option value="OWASP API Security Top 10 + DAST">OWASP API Security Top 10 + DAST</option>
-                  <option value="Fast Recon & Vulnerability Fuzzing">Fast Recon & Vulnerability Fuzzing (Nmap + Nuclei)</option>
-                  <option value="Deep Business Logic & Payout Probes">Deep Business Logic & Payout Probes (Acunetix + ZAP)</option>
+                  <option value="Fast Recon & Vulnerability Fuzzing">Fast Recon & Vulnerability Fuzzing</option>
+                  <option value="Deep Business Logic & Payout Probes">Deep Business Logic & Payout Probes</option>
                 </select>
               </div>
             </div>
@@ -339,7 +339,7 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                 Active Scanner Pipeline Engines (Select to include in mesh)
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {/* Nmap Pill */}
+                {/* Custom Port Scanning Engine Pill */}
                 <div
                   onClick={() => toggleTool('nmap')}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
@@ -351,14 +351,14 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                   <div className="flex items-center gap-2.5">
                     <Server className="h-5 w-5 text-sky-600" />
                     <div>
-                      <div className="text-xs font-mono font-bold">Nmap v7.99</div>
+                      <div className="text-xs font-mono font-bold">Custom Port Scanning Engine</div>
                       <div className="text-[10px] text-slate-500">Port & Shadow Recon</div>
                     </div>
                   </div>
                   <CheckCircle2 className={`h-4 w-4 ${selectedTools.includes('nmap') ? 'text-sky-600' : 'text-slate-300'}`} />
                 </div>
 
-                {/* Nuclei Pill */}
+                {/* Common Vulnerability Enumeration Engine Pill */}
                 <div
                   onClick={() => toggleTool('nuclei')}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
@@ -370,14 +370,14 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                   <div className="flex items-center gap-2.5">
                     <Flame className="h-5 w-5 text-purple-600" />
                     <div>
-                      <div className="text-xs font-mono font-bold">Nuclei v3.11</div>
-                      <div className="text-[10px] text-slate-500">Fast Misconfig Probes</div>
+                      <div className="text-xs font-mono font-bold">Common Vulnerability Enumeration Engine</div>
+                      <div className="text-[10px] text-slate-500">Fast Exposure Probes</div>
                     </div>
                   </div>
                   <CheckCircle2 className={`h-4 w-4 ${selectedTools.includes('nuclei') ? 'text-purple-600' : 'text-slate-300'}`} />
                 </div>
 
-                {/* ZAP Pill */}
+                {/* Dynamic Application Security Testing Engine Pill */}
                 <div
                   onClick={() => toggleTool('zap')}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
@@ -389,14 +389,14 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                   <div className="flex items-center gap-2.5">
                     <Zap className="h-5 w-5 text-amber-600" />
                     <div>
-                      <div className="text-xs font-mono font-bold">OWASP ZAP 2.14</div>
+                      <div className="text-xs font-mono font-bold">Dynamic Application Security Testing Engine</div>
                       <div className="text-[10px] text-slate-500">DAST & Auth Diff Fuzz</div>
                     </div>
                   </div>
                   <CheckCircle2 className={`h-4 w-4 ${selectedTools.includes('zap') ? 'text-amber-600' : 'text-slate-300'}`} />
                 </div>
 
-                {/* Acunetix Pill */}
+                {/* Deep DAST & Logic Engine Pill */}
                 <div
                   onClick={() => toggleTool('acunetix')}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
@@ -408,8 +408,8 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
                   <div className="flex items-center gap-2.5">
                     <Shield className="h-5 w-5 text-blue-600" />
                     <div>
-                      <div className="text-xs font-mono font-bold">Acunetix DAST</div>
-                      <div className="text-[10px] text-slate-500">Deep Logic Threat Crawler</div>
+                      <div className="text-xs font-mono font-bold">Deep DAST & Logic Engine</div>
+                      <div className="text-[10px] text-slate-500">Business Logic Threat Crawler</div>
                     </div>
                   </div>
                   <CheckCircle2 className={`h-4 w-4 ${selectedTools.includes('acunetix') ? 'text-blue-600' : 'text-slate-300'}`} />

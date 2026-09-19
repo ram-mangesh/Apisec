@@ -313,51 +313,51 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* 1. Nmap */}
+            {/* 1. Custom Port Scanning Engine */}
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-300 transition-all space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-slate-900">1. Nmap Binary</span>
+                <span className="font-mono font-bold text-xs text-slate-900">1. Custom Port Scanning Engine</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
                   ONLINE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600">Discovered 4 ports (80, 443, 8001, 8088 Shadow)</p>
+              <p className="text-[11px] text-slate-600">Discovered 4 open network ports (80, 443, 8001, 8088 Shadow)</p>
               <div className="text-[10px] font-mono text-slate-400">Latency: 1.2ms</div>
             </div>
 
-            {/* 2. Nuclei */}
+            {/* 2. Common Vulnerability Enumeration Engine */}
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-sky-300 transition-all space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-slate-900">2. Nuclei Fast CVE</span>
+                <span className="font-mono font-bold text-xs text-slate-900">2. Common Vulnerability Enumeration Engine</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 font-bold">
                   ONLINE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600">142 API templates scanned (Debug Leak flagged)</p>
-              <div className="text-[10px] font-mono text-slate-400">Templates: v3.2.1</div>
+              <p className="text-[11px] text-slate-600">142 vulnerability exposure templates scanned (Debug leak flagged)</p>
+              <div className="text-[10px] font-mono text-slate-400">Ruleset: v3.2.1</div>
             </div>
 
-            {/* 3. OWASP ZAP */}
+            {/* 3. Dynamic Application Security Testing Engine */}
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-300 transition-all space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-slate-900">3. OWASP ZAP</span>
+                <span className="font-mono font-bold text-xs text-slate-900">3. Dynamic Application Security Testing Engine</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-bold">
                   ONLINE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600">DAST Spider & Differential fuzzing active</p>
+              <p className="text-[11px] text-slate-600">Active & passive DAST spider and differential fuzzing</p>
               <div className="text-[10px] font-mono text-slate-400">BOLA probes: 42 sent</div>
             </div>
 
-            {/* 4. Acunetix */}
+            {/* 4. Deep Logic & Business Flaw Engine */}
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-purple-300 transition-all space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-slate-900">4. Acunetix DAST</span>
+                <span className="font-mono font-bold text-xs text-slate-900">4. Deep Logic & Business Flaw Engine</span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 font-bold">
                   ONLINE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600">Deep crawl & BFLA permission bypass crawler</p>
+              <p className="text-[11px] text-slate-600">Deep crawl and BFLA permission bypass simulation</p>
               <div className="text-[10px] font-mono text-slate-400">Engine: Enterprise v24.2</div>
             </div>
           </div>
