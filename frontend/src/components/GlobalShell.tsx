@@ -24,6 +24,7 @@ import {
   Cpu,
   Radio,
   Zap,
+  Lock,
 } from 'lucide-react';
 import { NotificationItem, Project } from '../types';
 import { MOCK_PROJECTS, MOCK_NOTIFICATIONS } from '../api';
@@ -108,25 +109,45 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
     setNotifications(notifications.map((n) => ({ ...n, read: true })));
   };
 
-  const navItems = [
-    { id: 'dashboard' as ScreenType, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'project-setup' as ScreenType, label: 'Projects', icon: FolderKanban },
-    { id: 'discovery' as ScreenType, label: 'Discovery Mesh', icon: Compass, badge: 'Live' },
-    { id: 'inventory' as ScreenType, label: 'API Inventory', icon: Layers, badge: '21' },
-    { id: 'findings' as ScreenType, label: 'Findings', icon: ShieldAlert, badge: '7', badgeType: 'critical' },
-    { id: 'evidence' as ScreenType, label: 'Evidence Diff', icon: Split },
-    { id: 'attack-paths' as ScreenType, label: 'Attack Paths', icon: GitFork, badge: '3', badgeType: 'warning' },
-    { id: 'validation' as ScreenType, label: 'Live Prober', icon: CheckCircle2, badge: 'Auto' },
-    { id: 'reports' as ScreenType, label: 'Reports', icon: FileText },
-    { id: 'copilot' as ScreenType, label: 'AI Copilot', icon: Sparkles, badge: 'AI', badgeType: 'ai' },
-    { id: 'settings' as ScreenType, label: 'Settings', icon: Settings },
+  const navSections = [
+    {
+      title: 'CORE ENGINE',
+      items: [
+        { id: 'dashboard' as ScreenType, label: 'Dashboard', icon: LayoutDashboard },
+        { id: 'inventory' as ScreenType, label: 'API Inventory', icon: Layers, badge: '21' },
+        { id: 'discovery' as ScreenType, label: 'Discovery Mesh', icon: Compass, badge: 'Live' },
+        { id: 'attack-paths' as ScreenType, label: 'Attack Paths', icon: GitFork, badge: '3', badgeType: 'warning' },
+      ],
+    },
+    {
+      title: 'SECURITY AUDIT',
+      items: [
+        { id: 'findings' as ScreenType, label: 'Findings', icon: ShieldAlert, badge: '7', badgeType: 'critical' },
+        { id: 'evidence' as ScreenType, label: 'Evidence Diff', icon: Split },
+        { id: 'validation' as ScreenType, label: 'Live Prober', icon: CheckCircle2, badge: 'Auto' },
+        { id: 'copilot' as ScreenType, label: 'AI Copilot', icon: Sparkles, badge: 'AI', badgeType: 'ai' },
+      ],
+    },
+    {
+      title: 'MANAGEMENT',
+      items: [
+        { id: 'reports' as ScreenType, label: 'Reports', icon: FileText },
+        { id: 'project-setup' as ScreenType, label: 'Projects & Scope', icon: FolderKanban },
+        { id: 'settings' as ScreenType, label: 'Settings', icon: Settings },
+      ],
+    },
   ];
 
   const getBreadcrumbs = () => {
     const crumbs = [{ label: currentProject.name, screen: 'dashboard' as ScreenType }];
-    const currentItem = navItems.find((n) => n.id === currentScreen);
-    if (currentItem) {
-      crumbs.push({ label: currentItem.label, screen: currentItem.id });
+    let foundLabel = '';
+    navSections.forEach((sec) => {
+      const match = sec.items.find((n) => n.id === currentScreen);
+      if (match) foundLabel = match.label;
+    });
+
+    if (foundLabel) {
+      crumbs.push({ label: foundLabel, screen: currentScreen });
     }
 
     if (currentScreen === 'findings' && selectedFindingId) {
@@ -143,114 +164,135 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
   return (
     <div className="flex h-screen w-screen overflow-hidden antialiased font-sans bg-slate-50 text-slate-800">
       {/* ========================================================================= */}
-      {/* PURE WHITE THEME MODERN SIDEBAR */}
+      {/* FULL-HEIGHT MODERN WHITE THEME SIDEBAR */}
       {/* ========================================================================= */}
       <aside
         className={`${
-          sidebarCollapsed ? 'w-20 min-w-20' : 'w-[250px] min-w-[250px]'
-        } shrink-0 flex flex-col justify-between transition-all duration-300 z-30 select-none bg-white border-r border-slate-200 shadow-xs`}
+          sidebarCollapsed ? 'w-20 min-w-20' : 'w-[260px] min-w-[260px]'
+        } shrink-0 flex flex-col justify-between transition-all duration-300 z-30 select-none bg-white border-r border-slate-200 shadow-xs h-full`}
       >
         {/* Brand Top Header */}
-        <div>
-          <div className="h-[74px] flex items-center px-4 border-b border-slate-200 justify-between">
+        <div className="h-[74px] shrink-0 flex items-center px-4 border-b border-slate-200 justify-between">
+          <div
+            onClick={() => onNavigate('dashboard')}
+            className="flex items-center gap-3 cursor-pointer group"
+          >
             <div
-              onClick={() => onNavigate('dashboard')}
-              className="flex items-center gap-3 cursor-pointer group"
+              className="h-10 w-10 rounded-xl flex items-center justify-center text-white shadow-md transition-transform group-hover:scale-105"
+              style={{
+                background: `linear-gradient(135deg, ${currentConfig.primary}, ${currentConfig.primaryHover})`,
+                boxShadow: `0 4px 14px ${currentConfig.glow}`,
+              }}
             >
-              <div
-                className="h-10 w-10 rounded-xl flex items-center justify-center text-white shadow-md transition-transform group-hover:scale-105"
-                style={{
-                  background: `linear-gradient(135deg, ${currentConfig.primary}, ${currentConfig.primaryHover})`,
-                  boxShadow: `0 4px 14px ${currentConfig.glow}`,
-                }}
-              >
-                <Shield className="h-5 w-5" />
-              </div>
+              <Shield className="h-5 w-5" />
+            </div>
 
-              {!sidebarCollapsed && (
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-mono text-[16px] font-black tracking-wider text-slate-900">
-                      APISEC
-                    </span>
-                    <span
-                      className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded tracking-widest uppercase border"
-                      style={{
-                        backgroundColor: currentConfig.badgeBg,
-                        color: currentConfig.badgeText,
-                        borderColor: currentConfig.badgeBorder,
-                      }}
-                    >
-                      v2.4
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-slate-500 font-medium tracking-tight">
-                    API Security & Attack Mesh
+            {!sidebarCollapsed && (
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono text-[16px] font-black tracking-wider text-slate-900">
+                    APISEC
+                  </span>
+                  <span
+                    className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded tracking-widest uppercase border"
+                    style={{
+                      backgroundColor: currentConfig.badgeBg,
+                      color: currentConfig.badgeText,
+                      borderColor: currentConfig.badgeBorder,
+                    }}
+                  >
+                    v2.4
                   </span>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <div className="px-3 py-4 space-y-1 overflow-y-auto max-h-[calc(100vh-280px)]">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentScreen === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onNavigate(item.id)}
-                  title={sidebarCollapsed ? item.label : undefined}
-                  className={`w-full flex items-center ${
-                    sidebarCollapsed ? 'justify-center px-0' : 'justify-between px-3.5'
-                  } h-[42px] rounded-xl text-[13px] font-semibold transition-all duration-150 relative group ${
-                    isActive
-                      ? 'shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: currentConfig.activeNavBg,
-                          color: currentConfig.primary,
-                          borderLeft: `3.5px solid ${currentConfig.primary}`,
-                          fontWeight: 700,
-                        }
-                      : {}
-                  }
-                >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <Icon
-                      className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110`}
-                      style={{ color: isActive ? currentConfig.primary : 'currentColor' }}
-                    />
-                    {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
-                  </div>
-
-                  {!sidebarCollapsed && item.badge && (
-                    <span
-                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
-                        item.badgeType === 'critical'
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
-                          : item.badgeType === 'warning'
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : item.badgeType === 'ai'
-                          ? 'bg-purple-50 text-purple-700 border-purple-200'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                <span className="text-[10px] text-slate-500 font-medium tracking-tight">
+                  API Security & Attack Mesh
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Sidebar Bottom: User Profile */}
-        <div className="p-3 border-t border-slate-200 space-y-2.5">
+        {/* Navigation Links - Full Vertical Space */}
+        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+          {navSections.map((sec, sIdx) => (
+            <div key={sIdx} className="space-y-1">
+              {!sidebarCollapsed && (
+                <div className="px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                  {sec.title}
+                </div>
+              )}
+              {sec.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentScreen === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onNavigate(item.id)}
+                    title={sidebarCollapsed ? item.label : undefined}
+                    className={`w-full flex items-center ${
+                      sidebarCollapsed ? 'justify-center px-0' : 'justify-between px-3'
+                    } h-[38px] rounded-xl text-[13px] font-semibold transition-all duration-150 relative group cursor-pointer ${
+                      isActive
+                        ? 'shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                    style={
+                      isActive
+                        ? {
+                            backgroundColor: currentConfig.activeNavBg,
+                            color: currentConfig.primary,
+                            borderLeft: `3.5px solid ${currentConfig.primary}`,
+                            fontWeight: 700,
+                          }
+                        : {}
+                    }
+                  >
+                    <div className="flex items-center gap-2.5 overflow-hidden">
+                      <Icon
+                        className="h-4 w-4 shrink-0 transition-transform group-hover:scale-110"
+                        style={{ color: isActive ? currentConfig.primary : 'currentColor' }}
+                      />
+                      {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+                    </div>
+
+                    {!sidebarCollapsed && item.badge && (
+                      <span
+                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                          item.badgeType === 'critical'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : item.badgeType === 'warning'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : item.badgeType === 'ai'
+                            ? 'bg-purple-50 text-purple-700 border-purple-200'
+                            : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* Sidebar Bottom: Scope Status Card + User Profile */}
+        <div className="p-3 border-t border-slate-200 space-y-2 shrink-0 bg-white">
+          {!sidebarCollapsed && (
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 font-sans">
+              <div className="flex items-center justify-between font-mono font-bold text-[10px] text-slate-500 uppercase tracking-wider">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Scope Status
+                </span>
+                <span className="text-emerald-700 font-bold">ONLINE</span>
+              </div>
+              <div className="text-xs font-bold text-slate-900 truncate">{currentProject.name}</div>
+              <div className="text-[10px] text-slate-500 font-mono">21 Endpoints • 7 Proved Vulnerabilities</div>
+            </div>
+          )}
+
           {/* User Profile Card */}
           <div className="relative" ref={userRef}>
             <div

@@ -259,84 +259,131 @@ export const DiscoveryScreen: React.FC<DiscoveryScreenProps> = ({
         </div>
       )}
 
-      {/* Main Tabs Container */}
-      <div className="p-6 rounded-2xl cyber-card space-y-5 bg-white">
-        {/* Navigation Engine Selector Tabs */}
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 overflow-x-auto font-mono text-xs font-bold">
-          <button
-            onClick={() => setActiveTab('unified')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'unified'
-                ? 'bg-purple-50 text-purple-700 border border-purple-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <Cpu className="h-4 w-4 text-purple-600" />
-            <span>Unified Multi-Mesh</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-100 text-purple-800">
-              4 ENGINES
-            </span>
-          </button>
+      {/* Main Tabs & Engine Workspace Container */}
+      <div className="p-6 rounded-2xl cyber-card space-y-6 bg-white">
+        {/* Interactive Responsive Engine Selector Grid */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-500 uppercase tracking-wider px-1">
+            <span>Select Active Engine View ({selectedTools.length}/4 Active in Pipeline):</span>
+            <span className="text-purple-700">Click card to switch workspace</span>
+          </div>
 
-          <button
-            onClick={() => setActiveTab('nmap')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'nmap'
-                ? 'bg-sky-50 text-sky-800 border border-sky-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <Server className="h-4 w-4 text-sky-600" />
-            <span>Custom Port Scanning Engine</span>
-          </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-mono">
+            {/* 1. Unified Multi-Mesh */}
+            <button
+              onClick={() => setActiveTab('unified')}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                activeTab === 'unified'
+                  ? 'bg-purple-50 border-purple-400 ring-2 ring-purple-200 shadow-sm'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/80'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                  <Cpu className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">
+                  4 ENGINES
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900">Unified Multi-Mesh</div>
+                <div className="text-[10px] text-slate-500 font-sans mt-0.5">Cross-engine causal DAG orchestrator</div>
+              </div>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('nuclei')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'nuclei'
-                ? 'bg-purple-50 text-purple-800 border border-purple-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <Flame className="h-4 w-4 text-purple-600" />
-            <span>CVE Enumeration Engine</span>
-          </button>
+            {/* 2. Custom Port Scanning Engine */}
+            <button
+              onClick={() => setActiveTab('nmap')}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                activeTab === 'nmap'
+                  ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-200 shadow-sm'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/80'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
+                  <Server className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">
+                  6 PORTS
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900">Port Scanning Engine</div>
+                <div className="text-[10px] text-slate-500 font-sans mt-0.5">Network listener & shadow recon</div>
+              </div>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('zap')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'zap'
-                ? 'bg-amber-50 text-amber-800 border border-amber-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <Zap className="h-4 w-4 text-amber-600" />
-            <span>Dynamic DAST Engine</span>
-          </button>
+            {/* 3. Common Vulnerability Enumeration Engine */}
+            <button
+              onClick={() => setActiveTab('nuclei')}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                activeTab === 'nuclei'
+                  ? 'bg-purple-50 border-purple-400 ring-2 ring-purple-200 shadow-sm'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/80'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                  <Flame className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">
+                  150+ CVEs
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900">CVE Enumeration Engine</div>
+                <div className="text-[10px] text-slate-500 font-sans mt-0.5">Automated YAML exposure heuristics</div>
+              </div>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('acunetix')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'acunetix'
-                ? 'bg-blue-50 text-blue-800 border border-blue-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <Shield className="h-4 w-4 text-blue-600" />
-            <span>Deep DAST & Logic Engine</span>
-          </button>
+            {/* 4. Dynamic Application Security Testing Engine */}
+            <button
+              onClick={() => setActiveTab('zap')}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                activeTab === 'zap'
+                  ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-200 shadow-sm'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/80'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                  <Zap className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
+                  42 PROBES
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900">Dynamic DAST Engine</div>
+                <div className="text-[10px] text-slate-500 font-sans mt-0.5">Differential authorization spidering</div>
+              </div>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('sarif')}
-            className={`flex items-center gap-2 h-9 px-4 rounded-xl uppercase transition-all cursor-pointer ${
-              activeTab === 'sarif'
-                ? 'bg-slate-100 text-slate-900 border border-slate-200 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
-            }`}
-          >
-            <FileJson className="h-4 w-4 text-slate-500" />
-            <span>SARIF Ingestion</span>
-          </button>
+            {/* 5. Deep DAST & Logic Engine */}
+            <button
+              onClick={() => setActiveTab('acunetix')}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                activeTab === 'acunetix'
+                  ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200 shadow-sm'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/80'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-8 w-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+                  PEAK 9.6
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900">Deep Logic DAST</div>
+                <div className="text-[10px] text-slate-500 font-sans mt-0.5">Business logic & permission bypass</div>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* ========================================================================= */}
