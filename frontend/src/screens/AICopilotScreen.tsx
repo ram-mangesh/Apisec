@@ -169,62 +169,63 @@ export const AICopilotScreen: React.FC<AICopilotScreenProps> = ({ onNavigate }) 
   };
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col max-w-5xl mx-auto cyber-card rounded-2xl overflow-hidden shadow-lg animate-in fade-in duration-200 bg-white">
+    <div className="h-[calc(100vh-6rem)] sm:h-[calc(100vh-8rem)] flex flex-col max-w-5xl mx-auto cyber-card rounded-2xl overflow-hidden shadow-lg animate-in fade-in duration-200 bg-white">
       {/* Copilot Header */}
-      <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-        <div className="flex items-center gap-3">
+      <div className="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 gap-2">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div
-            className="h-10 w-10 rounded-xl flex items-center justify-center text-white shadow-md"
+            className="h-9 sm:h-10 w-9 sm:w-10 rounded-xl flex items-center justify-center text-white shadow-md shrink-0"
             style={{
               background: `linear-gradient(135deg, ${currentConfig.primary}, #7C3AED)`,
               boxShadow: `0 4px 12px ${currentConfig.glow}`,
             }}
           >
-            <Sparkles className="h-5 w-5" />
+            <Sparkles className="h-4 sm:h-5 w-4 sm:w-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider">
-                APISEC Deterministic AI Copilot
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h2 className="text-xs sm:text-sm font-bold text-slate-900 font-mono uppercase tracking-wider truncate">
+                APISEC AI Copilot
               </h2>
-              <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold" style={{ backgroundColor: currentConfig.badgeBg, color: currentConfig.badgeText, border: `1px solid ${currentConfig.badgeBorder}` }}>
+              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded text-[10px] font-mono font-bold" style={{ backgroundColor: currentConfig.badgeBg, color: currentConfig.badgeText, border: `1px solid ${currentConfig.badgeBorder}` }}>
                 Context-Aware
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-sans">
-              Connected to Acme Production Core Graph & Proof Knowledge Base
+            <p className="text-[11px] sm:text-xs text-slate-500 font-sans truncate">
+              Connected to Acme Production Core Graph & Proof KB
             </p>
           </div>
         </div>
 
-        <span className="text-xs font-mono text-emerald-600 flex items-center gap-1.5 font-bold">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" /> Mesh Sync Active
+        <span className="text-[10px] sm:text-xs font-mono text-emerald-600 flex items-center gap-1.5 font-bold shrink-0">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+          <span className="hidden sm:inline">Mesh Sync Active</span>
         </span>
       </div>
 
       {/* Message Chat Feed */}
-      <div className="flex-1 p-6 overflow-y-auto space-y-5 bg-slate-50/50">
+      <div className="flex-1 p-3 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5 bg-slate-50/50">
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex gap-3.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex gap-2 sm:gap-3.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {msg.role === 'assistant' && (
               <div
-                className="h-8 w-8 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs"
+                className="h-7 sm:h-8 w-7 sm:w-8 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs mt-0.5"
                 style={{
                   background: `linear-gradient(135deg, ${currentConfig.primary}, ${currentConfig.primaryHover})`,
                 }}
               >
-                <Bot className="h-4 w-4" />
+                <Bot className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
               </div>
             )}
 
             <div
-              className={`max-w-2xl rounded-2xl p-4 text-xs ${
+              className={`max-w-[88%] sm:max-w-2xl rounded-2xl p-3 sm:p-4 text-xs ${
                 msg.role === 'user'
                   ? 'bg-purple-600 text-white shadow-md font-sans'
-                  : 'bg-white text-slate-800 border border-slate-200 shadow-sm'
+                  : 'bg-white text-slate-800 border border-slate-200 shadow-xs'
               }`}
             >
               {msg.role === 'user' ? (

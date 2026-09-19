@@ -122,25 +122,25 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0 z-10 font-mono">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0 z-10 font-mono w-full sm:w-auto">
           <button
             onClick={handleQuickScan}
             disabled={isScanning}
-            className="flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all hover:scale-102 cursor-pointer cyber-glow-btn"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 h-10 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all hover:scale-102 cursor-pointer cyber-glow-btn"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${isScanning ? 'animate-spin' : ''}`} />
             <span>{isScanning ? 'Syncing Mesh...' : 'Trigger Scan Mesh'}</span>
           </button>
           <button
             onClick={() => onNavigate('copilot')}
-            className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 hover:bg-purple-100 shadow-xs transition-all cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 h-10 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 hover:bg-purple-100 shadow-xs transition-all cursor-pointer"
           >
             <Sparkles className="h-4 w-4 text-purple-600" />
             <span>AI Copilot</span>
           </button>
           <button
             onClick={() => onNavigate('reports')}
-            className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 transition-all cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 h-10 px-3.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 transition-all cursor-pointer"
           >
             <FileText className="h-4 w-4 text-slate-500" />
             <span>Reports</span>

@@ -149,7 +149,7 @@ export const ReportsScreen: React.FC<ReportsScreenProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full min-w-[650px] text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider font-bold">
                 <th className="py-2.5 px-3">OWASP Category</th>

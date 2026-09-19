@@ -211,9 +211,9 @@ export const FindingDetailsScreen: React.FC<FindingDetailsScreenProps> = ({
           </div>
 
           {/* Table */}
-          <div className="p-5 rounded-2xl cyber-card overflow-hidden bg-white">
+          <div className="p-4 sm:p-5 rounded-2xl cyber-card overflow-hidden bg-white">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse font-mono">
+              <table className="w-full min-w-[700px] text-left text-xs border-collapse font-mono">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider font-bold">
                     <th className="py-3.5 px-3.5">ID</th>

@@ -183,9 +183,9 @@ export const InventoryScreen: React.FC<InventoryScreenProps> = ({
       </div>
 
       {/* Main Endpoints Table */}
-      <div className="p-5 rounded-2xl cyber-card overflow-hidden bg-white">
+      <div className="p-4 sm:p-5 rounded-2xl cyber-card overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse font-mono">
+          <table className="w-full min-w-[750px] text-left text-xs border-collapse font-mono">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 font-mono font-bold uppercase text-[10px] tracking-wider">
                 <th className="py-3 px-3 w-20">Method</th>

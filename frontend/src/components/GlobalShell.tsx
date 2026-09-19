@@ -25,6 +25,8 @@ import {
   Radio,
   Zap,
   Lock,
+  Menu,
+  X,
 } from 'lucide-react';
 import { NotificationItem, Project } from '../types';
 import { MOCK_PROJECTS, MOCK_NOTIFICATIONS } from '../api';
@@ -77,7 +79,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
   const [notifications, setNotifications] = useState<NotificationItem[]>(MOCK_NOTIFICATIONS);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const notifRef = useRef<HTMLDivElement>(null);
   const projRef = useRef<HTMLDivElement>(null);
@@ -138,6 +140,11 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
     },
   ];
 
+  const handleNavClick = (id: ScreenType) => {
+    onNavigate(id);
+    setMobileMenuOpen(false);
+  };
+
   const getBreadcrumbs = () => {
     const crumbs = [{ label: currentProject.name, screen: 'dashboard' as ScreenType }];
     let foundLabel = '';
@@ -162,19 +169,27 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden antialiased font-sans bg-slate-50 text-slate-800">
+    <div className="flex h-screen w-screen overflow-hidden antialiased font-sans bg-slate-50 text-slate-800 relative">
+      {/* Mobile Drawer Backdrop Overlay */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 md:hidden animate-in fade-in duration-200"
+        />
+      )}
+
       {/* ========================================================================= */}
-      {/* FULL-HEIGHT MODERN WHITE THEME SIDEBAR */}
+      {/* FULLY RESPONSIVE WHITE THEME SIDEBAR (DESKTOP + MOBILE DRAWER) */}
       {/* ========================================================================= */}
       <aside
-        className={`${
-          sidebarCollapsed ? 'w-20 min-w-20' : 'w-[260px] min-w-[260px]'
-        } shrink-0 flex flex-col justify-between transition-all duration-300 z-30 select-none bg-white border-r border-slate-200 shadow-xs h-full`}
+        className={`fixed md:static inset-y-0 left-0 z-50 w-[260px] min-w-[260px] shrink-0 flex flex-col justify-between transition-transform duration-300 select-none bg-white border-r border-slate-200 shadow-xl md:shadow-xs h-full ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
       >
         {/* Brand Top Header */}
         <div className="h-[74px] shrink-0 flex items-center px-4 border-b border-slate-200 justify-between">
           <div
-            onClick={() => onNavigate('dashboard')}
+            onClick={() => handleNavClick('dashboard')}
             className="flex items-center gap-3 cursor-pointer group"
           >
             <div
@@ -187,51 +202,52 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
               <Shield className="h-5 w-5" />
             </div>
 
-            {!sidebarCollapsed && (
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-mono text-[16px] font-black tracking-wider text-slate-900">
-                    APISEC
-                  </span>
-                  <span
-                    className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded tracking-widest uppercase border"
-                    style={{
-                      backgroundColor: currentConfig.badgeBg,
-                      color: currentConfig.badgeText,
-                      borderColor: currentConfig.badgeBorder,
-                    }}
-                  >
-                    v2.4
-                  </span>
-                </div>
-                <span className="text-[10px] text-slate-500 font-medium tracking-tight">
-                  API Security & Attack Mesh
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono text-[16px] font-black tracking-wider text-slate-900">
+                  APISEC
+                </span>
+                <span
+                  className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded tracking-widest uppercase border"
+                  style={{
+                    backgroundColor: currentConfig.badgeBg,
+                    color: currentConfig.badgeText,
+                    borderColor: currentConfig.badgeBorder,
+                  }}
+                >
+                  v2.4
                 </span>
               </div>
-            )}
+              <span className="text-[10px] text-slate-500 font-medium tracking-tight">
+                API Security & Attack Mesh
+              </span>
+            </div>
           </div>
+
+          {/* Close button on mobile */}
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 md:hidden"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
         {/* Navigation Links - Full Vertical Space */}
         <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
           {navSections.map((sec, sIdx) => (
             <div key={sIdx} className="space-y-1">
-              {!sidebarCollapsed && (
-                <div className="px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                  {sec.title}
-                </div>
-              )}
+              <div className="px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                {sec.title}
+              </div>
               {sec.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentScreen === item.id;
                 return (
                   <button
                     key={item.id}
-                    onClick={() => onNavigate(item.id)}
-                    title={sidebarCollapsed ? item.label : undefined}
-                    className={`w-full flex items-center ${
-                      sidebarCollapsed ? 'justify-center px-0' : 'justify-between px-3'
-                    } h-[38px] rounded-xl text-[13px] font-semibold transition-all duration-150 relative group cursor-pointer ${
+                    onClick={() => handleNavClick(item.id)}
+                    className={`w-full flex items-center justify-between px-3 h-[38px] rounded-xl text-[13px] font-semibold transition-all duration-150 relative group cursor-pointer ${
                       isActive
                         ? 'shadow-xs'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -252,10 +268,10 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                         className="h-4 w-4 shrink-0 transition-transform group-hover:scale-110"
                         style={{ color: isActive ? currentConfig.primary : 'currentColor' }}
                       />
-                      {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+                      <span className="truncate">{item.label}</span>
                     </div>
 
-                    {!sidebarCollapsed && item.badge && (
+                    {item.badge && (
                       <span
                         className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
                           item.badgeType === 'critical'
@@ -279,19 +295,17 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
 
         {/* Sidebar Bottom: Scope Status Card + User Profile */}
         <div className="p-3 border-t border-slate-200 space-y-2 shrink-0 bg-white">
-          {!sidebarCollapsed && (
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 font-sans">
-              <div className="flex items-center justify-between font-mono font-bold text-[10px] text-slate-500 uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Scope Status
-                </span>
-                <span className="text-emerald-700 font-bold">ONLINE</span>
-              </div>
-              <div className="text-xs font-bold text-slate-900 truncate">{currentProject.name}</div>
-              <div className="text-[10px] text-slate-500 font-mono">21 Endpoints • 7 Proved Vulnerabilities</div>
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 font-sans">
+            <div className="flex items-center justify-between font-mono font-bold text-[10px] text-slate-500 uppercase tracking-wider">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                Scope Status
+              </span>
+              <span className="text-emerald-700 font-bold">ONLINE</span>
             </div>
-          )}
+            <div className="text-xs font-bold text-slate-900 truncate">{currentProject.name}</div>
+            <div className="text-[10px] text-slate-500 font-mono">21 Endpoints • 7 Proved Vulnerabilities</div>
+          </div>
 
           {/* User Profile Card */}
           <div className="relative" ref={userRef}>
@@ -307,13 +321,11 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
               >
                 SEC
               </div>
-              {!sidebarCollapsed && (
-                <div className="flex flex-col truncate flex-1">
-                  <span className="text-[12px] font-bold text-slate-800 truncate">SecOps Lead</span>
-                  <span className="text-[10px] text-slate-500 font-mono truncate">Role: Admin</span>
-                </div>
-              )}
-              {!sidebarCollapsed && <ChevronDown className="h-3.5 w-3.5 text-slate-400" />}
+              <div className="flex flex-col truncate flex-1">
+                <span className="text-[12px] font-bold text-slate-800 truncate">SecOps Lead</span>
+                <span className="text-[10px] text-slate-500 font-mono truncate">Role: Admin</span>
+              </div>
+              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
             </div>
 
             {userDropdownOpen && (
@@ -323,7 +335,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                 </div>
                 <button
                   onClick={() => {
-                    onNavigate('settings');
+                    handleNavClick('settings');
                     setUserDropdownOpen(false);
                   }}
                   className="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700"
@@ -352,37 +364,47 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
       {/* ========================================================================= */}
       <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
         {/* Top Header */}
-        <header className="h-[74px] shrink-0 border-b border-slate-200 px-6 flex items-center justify-between z-20 bg-white">
-          {/* Breadcrumb Left */}
-          <div className="flex items-center gap-2 text-[12px]">
-            {getBreadcrumbs().map((crumb, idx, arr) => (
-              <React.Fragment key={idx}>
-                <button
-                  onClick={() => onNavigate(crumb.screen)}
-                  className={`transition-colors truncate max-w-[220px] font-medium ${
-                    idx === arr.length - 1 ? 'font-bold' : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                  style={idx === arr.length - 1 ? { color: currentConfig.primary } : {}}
-                >
-                  {crumb.label}
-                </button>
-                {idx < arr.length - 1 && <span className="text-slate-300 font-mono">/</span>}
-              </React.Fragment>
-            ))}
+        <header className="h-[64px] sm:h-[74px] shrink-0 border-b border-slate-200 px-3 sm:px-6 flex items-center justify-between z-20 bg-white">
+          {/* Mobile Hamburger Button + Breadcrumb Left */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 -ml-1 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 md:hidden cursor-pointer shrink-0"
+              title="Open Navigation Menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12px] overflow-hidden">
+              {getBreadcrumbs().map((crumb, idx, arr) => (
+                <React.Fragment key={idx}>
+                  <button
+                    onClick={() => handleNavClick(crumb.screen)}
+                    className={`transition-colors truncate max-w-[100px] sm:max-w-[180px] md:max-w-[220px] font-medium ${
+                      idx === arr.length - 1 ? 'font-bold' : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                    style={idx === arr.length - 1 ? { color: currentConfig.primary } : {}}
+                  >
+                    {crumb.label}
+                  </button>
+                  {idx < arr.length - 1 && <span className="text-slate-300 font-mono">/</span>}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
 
           {/* Right Controls: Theme Color Switcher + Project Selector + Search + Notifications */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Global Search Button */}
             <button
               onClick={onOpenSearch}
-              className="flex items-center justify-between w-[240px] lg:w-[280px] h-[38px] px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-[12px] text-slate-500 transition-all hover:border-slate-400 hover:text-slate-800"
+              className="flex items-center justify-between h-[36px] sm:h-[38px] px-2.5 sm:px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-[12px] text-slate-500 transition-all hover:border-slate-400 hover:text-slate-800 w-auto sm:w-[200px] lg:w-[260px]"
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2">
                 <Search className="h-4 w-4" style={{ color: currentConfig.primary }} />
-                <span>Search routes, CVEs, paths...</span>
+                <span className="hidden sm:inline truncate">Search routes, CVEs...</span>
               </div>
-              <kbd className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white text-slate-600 border border-slate-200 shadow-xs">
+              <kbd className="hidden lg:inline-block text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white text-slate-600 border border-slate-200 shadow-xs">
                 ⌘K
               </kbd>
             </button>
@@ -391,7 +413,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             <div className="relative" ref={themeRef}>
               <button
                 onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
-                className="flex items-center gap-2 h-[38px] px-3 rounded-xl border border-slate-200 bg-white text-[12px] font-semibold text-slate-700 transition-all hover:bg-slate-50 shadow-xs"
+                className="flex items-center gap-1.5 sm:gap-2 h-[36px] sm:h-[38px] px-2 sm:px-3 rounded-xl border border-slate-200 bg-white text-[12px] font-semibold text-slate-700 transition-all hover:bg-slate-50 shadow-xs"
                 title="Change Color Theme"
               >
                 <span
@@ -400,12 +422,12 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                     backgroundColor: currentConfig.primary,
                   }}
                 />
-                <span className="hidden sm:inline font-mono text-xs">{currentConfig.name}</span>
+                <span className="hidden md:inline font-mono text-xs">{currentConfig.name}</span>
                 <Palette className="h-3.5 w-3.5 text-slate-400" />
               </button>
 
               {themeDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 rounded-2xl shadow-xl py-3 px-3 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
+                <div className="absolute right-0 mt-2 w-56 sm:w-64 rounded-2xl shadow-xl py-3 px-3 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
                   <div className="pb-2 mb-2 border-b border-slate-100">
                     <span className="font-mono text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                       Theme Accent Color
@@ -424,7 +446,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                             setColorTheme(key);
                             setThemeDropdownOpen(false);
                           }}
-                          className={`w-full text-left px-2.5 py-2 rounded-xl flex items-center justify-between transition-all ${
+                          className={`w-full text-left px-2.5 py-2 rounded-xl flex items-center justify-between transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-slate-100 text-slate-900 font-bold'
                               : 'hover:bg-slate-50 text-slate-700'
@@ -452,15 +474,15 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             <div className="relative" ref={projRef}>
               <button
                 onClick={() => setProjectDropdownOpen(!projectDropdownOpen)}
-                className="flex items-center gap-2 h-[38px] px-3.5 rounded-xl border border-slate-200 bg-white text-[12px] font-bold text-slate-800 transition-all hover:bg-slate-50 shadow-xs"
+                className="flex items-center gap-1.5 sm:gap-2 h-[36px] sm:h-[38px] px-2.5 sm:px-3.5 rounded-xl border border-slate-200 bg-white text-[12px] font-bold text-slate-800 transition-all hover:bg-slate-50 shadow-xs"
               >
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="truncate max-w-[130px]">{currentProject.name}</span>
+                <span className="truncate max-w-[70px] sm:max-w-[120px]">{currentProject.name}</span>
                 <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
               </button>
 
               {projectDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-2xl shadow-xl py-2 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
+                <div className="absolute right-0 mt-2 w-64 sm:w-72 rounded-2xl shadow-xl py-2 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
                   <div className="px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
                     Switch Security Scope
                   </div>
@@ -471,7 +493,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                         onSelectProject(proj);
                         setProjectDropdownOpen(false);
                       }}
-                      className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 flex items-center justify-between transition-colors"
+                      className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 flex items-center justify-between transition-colors cursor-pointer"
                     >
                       <div>
                         <div className="font-semibold text-slate-800">{proj.name}</div>
@@ -490,7 +512,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             <div className="relative" ref={notifRef}>
               <button
                 onClick={() => setNotificationsOpen(!notificationsOpen)}
-                className="relative flex items-center justify-center h-[38px] w-[38px] rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50 shadow-xs"
+                className="relative flex items-center justify-center h-[36px] sm:h-[38px] w-[36px] sm:w-[38px] rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50 shadow-xs"
               >
                 <Bell className="h-4 w-4" />
                 {unreadNotifsCount > 0 && (
@@ -501,7 +523,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
               </button>
 
               {notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-84 rounded-2xl shadow-xl py-2 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
+                <div className="absolute right-0 mt-2 w-72 sm:w-84 max-w-[90vw] rounded-2xl shadow-xl py-2 z-50 text-[12px] border border-slate-200 bg-white animate-in fade-in">
                   <div className="flex items-center justify-between px-4 pb-2 border-b border-slate-100">
                     <span className="font-bold text-slate-900 text-[13px]">Real-Time Cyber Alerts</span>
                     <button
@@ -524,7 +546,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                           );
                           setNotificationsOpen(false);
                           if (notif.link_screen) {
-                            onNavigate(notif.link_screen as ScreenType, notif.link_id);
+                            handleNavClick(notif.link_screen as ScreenType);
                           }
                         }}
                         className={`p-3.5 hover:bg-slate-100 cursor-pointer transition-all group ${
@@ -558,8 +580,8 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
           </div>
         </header>
 
-        {/* Main View Area */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8 cyber-grid-bg bg-slate-50">
+        {/* Main View Area with Mobile Padding */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 cyber-grid-bg bg-slate-50">
           {children}
         </main>
       </div>
